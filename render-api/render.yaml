@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: salso-workforce-api
+    runtime: node
+    repo: https://github.com/your-org/salso_workforce
+    branch: main
+    rootDir: render-api
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_CREDENTIALS_BASE64
+        sync: false
+      - key: SHAREPOINT_TENANT_ID
+        value: 55218b8a-fe5d-49d4-93c6-39c6e9a35df8
+      - key: SHAREPOINT_CLIENT_ID
+        value: 877f94de-6653-4447-b151-f3cfcfb1c36b
+      - key: SHAREPOINT_CLIENT_SECRET
+        sync: false
+      - key: SHAREPOINT_SITE_ID
+        value: salsoza.sharepoint.com,8de2ef85-352d-46e8-9111-fb2b1bc2028d,00b967c1-b382-4b9a-a221-9b1cb7429093
+      - key: SHAREPOINT_DRIVE_ID
+        value: b!he_ijS016EaREfsrG8ICjcFnuQCCs5pLoiGbHLdCkJOqXkoWf7ffSLUp8g4iabZx

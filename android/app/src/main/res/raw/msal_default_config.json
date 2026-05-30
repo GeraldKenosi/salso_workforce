@@ -1,0 +1,13 @@
+{
+  "client_id": "877f94de-6653-4447-b151-f3cfcfb1c36b",
+  "authorization_user_agent": "DEFAULT",
+  "redirect_uri": "msal877f94de-6653-4447-b151-f3cfcfb1c36b://auth",
+  "account_mode": "MULTIPLE",
+  "authorities": [
+    {
+      "type": "AAD",
+      "default": true,
+      "authority_url": "https://login.microsoftonline.com/55218b8a-fe5d-49d4-93c6-39c6e9a35df8"
+    }
+  ]
+}

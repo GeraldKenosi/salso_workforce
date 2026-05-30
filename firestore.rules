@@ -1,0 +1,155 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Users ───
+    match /users/{userId} {
+      allow read: if request.auth != null && (
+        request.auth.uid == userId ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roleTemplateId in ['admin', 'manager', 'executiveDirector']
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        request.auth.uid == userId ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roleTemplateId in ['admin', 'manager', 'executiveDirector']
+      );
+      allow delete: if false;
+    }
+
+    // ─── Attendance Events ───
+    match /attendanceEvents/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roleTemplateId in ['teamLeader', 'manager', 'executiveDirector']
+      );
+      allow delete: if false;
+    }
+
+    // ─── Clock-In Events ───
+    match /clockInEvents/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Attendance Corrections ───
+    match /attendanceCorrections/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ─── Attendance Registers + Participants ───
+    match /attendanceRegisters/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+
+      match /participants/{participantId} {
+        allow read, create: if request.auth != null;
+        allow update, delete: if false;
+      }
+    }
+
+    // ─── Reports (legacy) ───
+    match /reports/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Narrative Reports ───
+    match /narrativeReports/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Leave Requests ───
+    match /leaveRequests/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Reimbursements ───
+    match /reimbursements/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Finance SOPs ───
+    match /financeSops/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Workflow Requests (unified SOP) ───
+    match /workflowRequests/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+
+      match /comments/{commentId} {
+        allow read, create: if request.auth != null;
+        allow update, delete: if false;
+      }
+    }
+
+    // ─── Documents ───
+    match /documents/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // ─── Notifications ───
+    match /notifications/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ─── KPI Configs ───
+    match /kpiConfigs/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roleTemplateId == 'executiveDirector'
+      );
+    }
+
+    // ─── KPI Scores ───
+    match /kpiScores/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ─── KPI Targets (legacy) ───
+    match /kpiTargets/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ─── Resources ───
+    match /resources/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roleTemplateId == 'executiveDirector'
+      );
+    }
+
+    // ─── Audit Logs ───
+    match /auditLogs/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // ─── Announcements ───
+    match /announcements/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ─── Contact Messages ───
+    match /contactMessages/{docId} {
+      allow read, create: if request.auth != null;
+    }
+
+    // ─── HR Profiles ───
+    match /hrProfiles/{docId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
