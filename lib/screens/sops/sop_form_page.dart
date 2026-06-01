@@ -66,7 +66,7 @@ class _SopFormPageState extends State<SopFormPage> {
   }
 
   List<String> get _showAmounts => ['reimbursement', 'travel', 'vehicleRequest', 'budgetTransfer', 'procurement'];
-  List<String> get _showDates => ['travel', 'leave', 'trainingNomination', 'incidentReport', 'vehicleRequest', 'attendanceCorrection'];
+  List<String> get _showDates => ['reimbursement', 'travel', 'leave', 'trainingNomination', 'incidentReport', 'vehicleRequest', 'attendanceCorrection'];
   List<String> get _showLocations => ['travel', 'venueBooking', 'incidentReport', 'vehicleRequest', 'activityProposal', 'volunteerPlacement'];
 
   Future<void> _submit() async {
@@ -137,6 +137,18 @@ class _SopFormPageState extends State<SopFormPage> {
       }
     } finally {
       if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null) {
+      _dateCtrl.text = '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
     }
   }
 
@@ -211,7 +223,10 @@ class _SopFormPageState extends State<SopFormPage> {
             if (showDate) ...[
               TextFormField(
                 controller: _dateCtrl,
-                decoration: const InputDecoration(labelText: 'Date(s)', hintText: 'YYYY-MM-DD or range'),
+                decoration: const InputDecoration(labelText: 'Date *', hintText: 'Tap to select date', suffixIcon: Icon(Icons.calendar_month)),
+                readOnly: true,
+                onTap: _pickDate,
+                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 12),
             ],

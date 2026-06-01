@@ -356,9 +356,10 @@ app.post("/api/reminder-check", async (_req, res) => {
       await db.collection("notifications").add(n);
     }
 
-    res.json({ success: true, remindersCreated: notifications.length });
+    res.json({ success: true, remindersCreated: notifications.length, _count: notifications.length });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    const msg = String(e.message || "reminder-check failed").substring(0, 300);
+    res.status(500).json({ error: msg });
   }
 });
 
@@ -453,11 +454,18 @@ app.post("/api/kpi-populate", async (_req, res) => {
 
     res.json({ success: true, configsProcessed: configs.length });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    const msg = String(e.message || "kpi-populate failed").substring(0, 300);
+    res.status(500).json({ error: msg });
   }
 });
 
 // ─── Start server ───
+// ─── Catch-all error handler (truncates large responses) ───
+app.use((err, _req, res, _next) => {
+  const msg = String(err?.message || err || "Internal error").substring(0, 300);
+  res.status(500).json({ error: msg });
+});
+
 app.listen(PORT, () => {
   console.log(`SALSO Workforce API running on port ${PORT}`);
 });

@@ -51,36 +51,49 @@ class _TabAttendanceState extends State<TabAttendance> {
                   bottomRight: Radius.circular(24),
                 ),
               ),
-              padding: const EdgeInsets.fromLTRB(20, 48, 20, 24),
+              padding: const EdgeInsets.fromLTRB(20, 48, 20, 32),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 13)),
-                  const SizedBox(height: 12),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withValues(alpha: 0.15),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 3),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '${workedToday.inHours.toString().padLeft(2, '0')}:${workedToday.inMinutes.remainder(60).toString().padLeft(2, '0')}',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-                          ),
-                          Text(
-                            'of 8h today',
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 10),
-                          ),
-                        ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                            const SizedBox(height: 4),
+                            const Text('Attendance', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                          ],
+                        ),
                       ),
-                    ),
+                      Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.15),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 2),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${workedToday.inHours.toString().padLeft(2, '0')}:${workedToday.inMinutes.remainder(60).toString().padLeft(2, '0')}',
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              Text(
+                                'today',
+                                style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 9),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                     decoration: BoxDecoration(

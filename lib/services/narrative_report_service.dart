@@ -113,18 +113,24 @@ class NarrativeReportService {
     return _db
         .collection(collection)
         .where('userId', isEqualTo: user.uid)
-        .orderBy('createdAtMs', descending: true)
         .snapshots()
-        .map((s) => s.docs.map((d) => NarrativeReport.fromMap(d.data())).toList());
+        .map((s) {
+      final list = s.docs.map((d) => NarrativeReport.fromMap(d.data())).toList();
+      list.sort((a, b) => b.createdAtMs.compareTo(a.createdAtMs));
+      return list;
+    });
   }
 
   Stream<List<NarrativeReport>> streamPendingApprovals() {
     return _db
         .collection(collection)
         .where('status', isEqualTo: 'submitted')
-        .orderBy('createdAtMs', descending: true)
         .snapshots()
-        .map((s) => s.docs.map((d) => NarrativeReport.fromMap(d.data())).toList());
+        .map((s) {
+      final list = s.docs.map((d) => NarrativeReport.fromMap(d.data())).toList();
+      list.sort((a, b) => b.createdAtMs.compareTo(a.createdAtMs));
+      return list;
+    });
   }
 
   Stream<List<NarrativeReport>> streamAllForPeriod(int startMs, int endMs) {

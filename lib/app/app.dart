@@ -13,7 +13,6 @@ import '../services/attendance_correction_service.dart';
 import '../services/attendance_correction_admin_service.dart';
 import '../services/report_service.dart';
 import '../services/document_service.dart';
-import '../services/microsoft_auth_service.dart';
 import '../services/sharepoint_upload_service.dart';
 import '../services/hr_profile_service.dart';
 import '../services/hr_user_admin_service.dart';
@@ -76,8 +75,7 @@ class SalsoWorkforceApp extends StatelessWidget {
         Provider(create: (_) => AttendanceCorrectionAdminService(firestore, FirebaseAuth.instance)),
         Provider(create: (_) => ReportService(firestore, FirebaseAuth.instance)),
         Provider(create: (_) => DocumentService(firestore, FirebaseAuth.instance)),
-        Provider(create: (_) => MicrosoftAuthService()),
-        Provider(create: (ctx) => SharePointUploadService(ctx.read<MicrosoftAuthService>())),
+        Provider(create: (_) => SharePointUploadService(FirebaseStorage.instance)),
         Provider(create: (_) => HrProfileService(FirebaseFirestore.instance, FirebaseAuth.instance)),
         Provider(create: (_) => HrUserAdminService(FirebaseAuth.instance)),
         Provider(create: (_) => LeaveService(firestore, FirebaseAuth.instance)),

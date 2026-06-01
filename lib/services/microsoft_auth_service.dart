@@ -26,8 +26,12 @@ class MicrosoftAuthService {
     final pca = await _getPca();
     try {
       return await pca.acquireTokenSilent(scopes);
-    } on MsalException {
-      return await pca.acquireToken(scopes);
+    } catch (_) {
+      try {
+        return await pca.acquireToken(scopes);
+      } catch (e) {
+        throw Exception('MSAL auth failed: $e');
+      }
     }
   }
 

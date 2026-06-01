@@ -65,6 +65,28 @@ class _SignaturePadState extends State<SignaturePad> {
     }
   }
 
+  Future<void> _saveSignature() async {
+    Uint8List? png;
+    if (_currentPng != null) {
+      png = _currentPng;
+    } else if (_controller.points.isNotEmpty) {
+      png = await _controller.toPngBytes();
+    }
+    if (png == null) return;
+    try {
+      final svc = context.read<SignatureService>();
+      await svc.saveSignature(png);
+      setState(() => _savedSignature = png);
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Signature saved')),
+      );
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Save failed: $e')),
+      );
+    }
+  }
+
   Future<void> _useSavedSignature() async {
     if (_savedSignature == null) return;
     setState(() => _useSaved = true);
@@ -166,6 +188,12 @@ class _SignaturePadState extends State<SignaturePad> {
                 icon: const Icon(Icons.check, size: 16),
                 label: const Text('Confirm'),
                 onPressed: _exportPng,
+              ),
+            if (_currentPng != null)
+              TextButton.icon(
+                icon: const Icon(Icons.save, size: 16),
+                label: const Text('Save'),
+                onPressed: _saveSignature,
               ),
           ],
         ),
