@@ -3,14 +3,16 @@ const cors = require("cors");
 const https = require("https");
 const admin = require("firebase-admin");
 
-// ─── Firebase Admin (from GOOGLE_CREDENTIALS_BASE64 env var) ───
-if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+// ─── Firebase Admin (from env var: raw JSON or Base64) ───
+if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+  const creds = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+  admin.initializeApp({ credential: admin.credential.cert(creds) });
+} else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
   const creds = JSON.parse(
     Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, "base64").toString()
   );
   admin.initializeApp({ credential: admin.credential.cert(creds) });
 } else {
-  // fallback for local dev
   admin.initializeApp();
 }
 
