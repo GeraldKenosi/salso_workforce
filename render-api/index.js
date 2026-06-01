@@ -181,20 +181,15 @@ app.post("/api/hr-create-user", async (req, res) => {
   }
 });
 
-// ─── File transfer: Firebase Storage → SharePoint ───
+// ─── File transfer: bytes → SharePoint ───
 app.post("/api/file-transfer-sharepoint", async (req, res) => {
   try {
-    const { storagePath, sharePointPath, fileName } = req.body;
-    if (!storagePath || !sharePointPath || !fileName) {
-      return res.status(400).json({ error: "Missing required fields: storagePath, sharePointPath, fileName" });
+    const { sharePointPath, fileName, fileBase64 } = req.body;
+    if (!sharePointPath || !fileName || !fileBase64) {
+      return res.status(400).json({ error: "Missing required fields: sharePointPath, fileName, fileBase64" });
     }
 
-    const bucket = admin.storage().bucket();
-    const file = bucket.file(storagePath);
-    const [exists] = await file.exists();
-    if (!exists) return res.status(404).json({ error: "File not found in storage" });
-
-    const [contents] = await file.download();
+    const contents = Buffer.from(fileBase64, "base64");
     const config = sharePointConfig();
     const token = await getGraphToken(config);
     const result = await uploadToSharePoint(token, config, sharePointPath, contents, fileName);

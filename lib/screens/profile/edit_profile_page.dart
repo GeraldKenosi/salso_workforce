@@ -59,6 +59,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'nextOfKinPhone': _nokPhoneCtrl.text.trim(),
       });
 
+      if (mounted) context.read<SessionProvider>().refreshProfile();
       setState(() => _saved = true);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -75,7 +75,7 @@ class SalsoWorkforceApp extends StatelessWidget {
         Provider(create: (_) => AttendanceCorrectionAdminService(firestore, FirebaseAuth.instance)),
         Provider(create: (_) => ReportService(firestore, FirebaseAuth.instance)),
         Provider(create: (_) => DocumentService(firestore, FirebaseAuth.instance)),
-        Provider(create: (_) => SharePointUploadService(FirebaseStorage.instance)),
+        Provider(create: (_) => SharePointUploadService()),
         Provider(create: (_) => HrProfileService(FirebaseFirestore.instance, FirebaseAuth.instance)),
         Provider(create: (_) => HrUserAdminService(FirebaseAuth.instance)),
         Provider(create: (_) => LeaveService(firestore, FirebaseAuth.instance)),

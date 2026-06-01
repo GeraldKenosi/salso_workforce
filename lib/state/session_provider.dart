@@ -49,6 +49,15 @@ class SessionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> refreshProfile() async {
+    if (firebaseUser == null) return;
+    try {
+      final p = await _userService.getUserProfile(firebaseUser!.uid);
+      profile = p;
+      notifyListeners();
+    } catch (_) {}
+  }
+
   Future<void> signOut() async {
     await _authService.signOut();
   }

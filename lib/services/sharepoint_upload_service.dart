@@ -1,60 +1,40 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:uuid/uuid.dart';
 
 import 'api_config.dart';
 
 class SharePointUploadResult {
   final String webUrl;
-  final String itemId;
 
-  SharePointUploadResult({
-    required this.webUrl,
-    required this.itemId,
-  });
+  SharePointUploadResult({required this.webUrl});
 }
 
 class SharePointUploadService {
-  final FirebaseStorage _storage;
-  final _uuid = const Uuid();
-
-  SharePointUploadService(this._storage);
-
   Future<SharePointUploadResult> uploadToDocumentsLibrary({
     required String sharePointPath,
     required Uint8List bytes,
   }) async {
     final parts = _splitPath(sharePointPath);
     final fileName = parts.fileName;
-    final storagePath = 'sharepoint-transfers/${_uuid.v4()}/$fileName';
-
-    final ref = _storage.ref().child(storagePath);
-    await ref.putData(bytes, SettableMetadata(contentType: 'application/octet-stream'));
-    await ref.getDownloadURL();
 
     final resp = await http.post(
       Uri.parse(ApiConfig.fileTransferSharePoint),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'storagePath': storagePath,
         'sharePointPath': sharePointPath,
         'fileName': fileName,
+        'fileBase64': base64Encode(bytes),
       }),
     ).timeout(const Duration(minutes: 5));
 
     if (resp.statusCode != 200) {
-      final body = resp.body;
-      throw Exception('Server upload failed: ${resp.statusCode} $body');
+      throw Exception('Upload failed: ${resp.statusCode} ${resp.body}');
     }
 
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
-    final sharePointUrl = (data['sharePointUrl'] ?? '').toString();
-
     return SharePointUploadResult(
-      webUrl: sharePointUrl.isNotEmpty ? sharePointUrl : 'Uploaded to SharePoint',
-      itemId: '',
+      webUrl: (data['sharePointUrl'] ?? '').toString(),
     );
   }
 
