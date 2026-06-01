@@ -33,22 +33,6 @@
             </intent-filter>
         </activity>
 
-        <!-- MSAL Redirect Handler -->
-        <!-- msal_flutter requires this activity + intent-filter for Android auth redirects. -->
-        <activity
-            android:name="com.microsoft.identity.client.BrowserTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="msal877f94de-6653-4447-b151-f3cfcfb1c36b"
-                    android:host="auth" />
-            </intent-filter>
-        </activity>
-
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

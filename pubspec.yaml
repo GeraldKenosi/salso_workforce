@@ -45,7 +45,6 @@ dependencies:
   intl: ^0.20.2
   connectivity_plus: ^7.1.1
   file_picker: ^11.0.2
-  msal_flutter: ^2.0.1
   http: ^1.6.0
   geolocator: ^14.0.2
   firebase_storage: ^13.3.0
