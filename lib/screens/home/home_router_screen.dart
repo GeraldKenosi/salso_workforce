@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../state/session_provider.dart';
 import '../auth/login_screen.dart';
 import '../shell/app_shell.dart';
+import '../../widgets/splash_screen.dart';
 
 class HomeRouterScreen extends StatelessWidget {
   const HomeRouterScreen({super.key});
@@ -12,9 +13,7 @@ class HomeRouterScreen extends StatelessWidget {
     final session = context.watch<SessionProvider>();
 
     if (session.loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const SplashScreen();
     }
 
     // Not logged in
