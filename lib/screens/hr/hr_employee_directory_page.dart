@@ -7,6 +7,7 @@ import '../../state/session_provider.dart';
 import '../../utils/display_labels.dart';
 import '../../widgets/salso_card.dart';
 import '../../app/theme.dart';
+import 'employee_profile_page.dart';
 
 class HrEmployeeDirectoryPage extends StatefulWidget {
   const HrEmployeeDirectoryPage({super.key});
@@ -166,9 +167,11 @@ class _HrEmployeeDirectoryPageState extends State<HrEmployeeDirectoryPage> {
                     final phone = (data['phoneNumber'] ?? '').toString();
                     final idNumber = (data['idNumber'] ?? '').toString();
 
+                    final docId = docs[i].id;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: SalsoCard(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => EmployeeProfilePage(userId: docId))),
                         child: Padding(
                           padding: const EdgeInsets.all(12),
                           child: Column(

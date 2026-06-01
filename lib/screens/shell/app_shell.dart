@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../state/session_provider.dart';
+import '../../utils/display_labels.dart';
+import '../../app/theme.dart';
 import '../tabs/tab_home.dart';
 import '../tabs/tab_attendance.dart';
 import '../tabs/tab_reports.dart';
 import '../tabs/tab_sops.dart';
 import '../tabs/tab_profile.dart';
+import '../hr/hr_employee_directory_page.dart';
+import '../hr/contact_admin_page.dart';
+import '../hr/terms_page.dart';
+import '../hr/privacy_page.dart';
+import '../resources/resources_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -67,7 +74,56 @@ class _AppShellState extends State<AppShell> {
     final session = context.watch<SessionProvider>();
     final role = session.profile?.roleTemplateId.trim() ?? '';
 
+    final name = session.profile?.fullName ?? 'User';
+    final email = session.profile?.email ?? '';
+    final roleLabel = DisplayLabels.roleLabel(session.profile?.roleTemplateId ?? '');
+
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: SalsoTheme.primary),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundColor: Colors.white.withValues(alpha: 0.2),
+                      child: Text(name.isNotEmpty ? name[0].toUpperCase() : '?', style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(email, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12)),
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
+                      child: Text(roleLabel, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _drawerItem(Icons.people_outline, 'Employee Directory', () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const HrEmployeeDirectoryPage())); }),
+            _drawerItem(Icons.mail_outline, 'Contact Admin', () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const ContactAdminPage())); }),
+            _drawerItem(Icons.library_books_outlined, 'Resources', () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const ResourcesScreen())); }),
+            const Spacer(),
+            const Divider(height: 1),
+            _drawerItem(Icons.description_outlined, 'Terms of Service', () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const TermsPage())); }),
+            _drawerItem(Icons.privacy_tip_outlined, 'Privacy Policy', () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPage())); }),
+            const Divider(height: 1),
+            _drawerItem(Icons.logout, 'Sign Out', () {
+              Navigator.pop(context);
+              session.signOut();
+            }, color: SalsoTheme.primary),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
       body: IndexedStack(
         index: _index,
         children: _pages,
@@ -106,6 +162,16 @@ class _AppShellState extends State<AppShell> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _drawerItem(IconData icon, String label, VoidCallback onTap, {Color? color}) {
+    return ListTile(
+      leading: Icon(icon, color: color ?? Colors.grey[700], size: 22),
+      title: Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: color ?? Colors.grey[800])),
+      onTap: onTap,
+      dense: true,
+      visualDensity: VisualDensity.compact,
     );
   }
 }

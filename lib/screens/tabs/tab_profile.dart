@@ -9,7 +9,6 @@ import '../profile/edit_profile_page.dart';
 import '../documents/documents_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../resources/resources_screen.dart';
-import '../hr/hr_employee_directory_page.dart';
 
 class TabProfile extends StatelessWidget {
   const TabProfile({super.key});
@@ -158,11 +157,6 @@ class TabProfile extends StatelessWidget {
           const SizedBox(height: 8),
           _linkCard(context, Icons.library_books_outlined, 'Resources', const Color(0xFF0FA65A), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ResourcesScreen()))),
           const SizedBox(height: 8),
-
-          if (roleCode == 'executiveDirector' || roleCode == 'manager' || roleCode == 'admin') ...[
-            _linkCard(context, Icons.people_outline, 'Employee Directory', const Color(0xFF7B2D8E), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HrEmployeeDirectoryPage()))),
-            const SizedBox(height: 8),
-          ],
 
           // Sign out
           Padding(
