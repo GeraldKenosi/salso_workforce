@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../state/session_provider.dart';
 import '../../services/attendance_service.dart';
 import '../../services/workflow_service.dart';
+import '../../services/notification_service.dart';
+import '../../models/app_notification.dart';
 import '../../widgets/salso_card.dart';
 import '../../app/theme.dart';
 import '../attendance/my_attendance_history_page.dart';
@@ -66,7 +68,20 @@ class TabHome extends StatelessWidget {
                         ],
                       ),
                     ),
-                    NotificationBadge(count: 3),
+                    Consumer<NotificationService>(
+                      builder: (_, svc, __) => StreamBuilder<List<AppNotification>>(
+                        stream: svc.streamMyNotifications(),
+                        builder: (_, snap) {
+                          final unread = (snap.data ?? []).where((n) => !n.read).length;
+                          return NotificationBadge(
+                            count: unread,
+                            onTap: () => Navigator.push(context, MaterialPageRoute(
+                              builder: (_) => const NotificationsScreen(),
+                            )),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -204,23 +219,27 @@ class QuickActionTile extends StatelessWidget {
 
 class NotificationBadge extends StatelessWidget {
   final int count;
-  const NotificationBadge({super.key, this.count = 0});
+  final VoidCallback? onTap;
+  const NotificationBadge({super.key, this.count = 0, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.notifications, color: Colors.white, size: 16),
-          const SizedBox(width: 4),
-          Text('$count', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.notifications, color: Colors.white, size: 16),
+            const SizedBox(width: 4),
+            Text('$count', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12)),
+          ],
+        ),
       ),
     );
   }
