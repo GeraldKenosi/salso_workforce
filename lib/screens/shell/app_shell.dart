@@ -127,27 +127,23 @@ class _AppShellState extends State<AppShell> {
       body: Builder(
         builder: (ctx) => Stack(
           children: [
-            IndexedStack(
-              index: _index,
-              children: _pages,
+            Padding(
+              padding: const EdgeInsets.only(left: 44),
+              child: IndexedStack(
+                index: _index,
+                children: _pages,
+              ),
             ),
             SafeArea(
               child: Padding(
-                padding: const EdgeInsets.only(left: 12, top: 8),
+                padding: const EdgeInsets.only(left: 8, top: 8),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Material(
-                    color: Colors.white,
-                    elevation: 3,
-                    borderRadius: BorderRadius.circular(10),
-                    shadowColor: Colors.black26,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: () => Scaffold.of(ctx).openDrawer(),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(Icons.menu, color: Color(0xFFD90429), size: 22),
-                      ),
+                  child: InkWell(
+                    onTap: () => Scaffold.of(ctx).openDrawer(),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(Icons.menu, color: Colors.white, size: 24),
                     ),
                   ),
                 ),

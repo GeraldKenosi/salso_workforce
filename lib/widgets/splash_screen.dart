@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animCtrl;
+  bool _ready = false;
 
   @override
   void initState() {
@@ -17,7 +19,11 @@ class _SplashScreenState extends State<SplashScreen>
     _animCtrl = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
-    )..repeat();
+    );
+    _animCtrl.forward();
+    Timer(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _ready = true);
+    });
   }
 
   @override
@@ -28,18 +34,19 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (_ready) return const SizedBox.shrink();
+
     const barColors = [
       Colors.black,
-      Color(0xFFFDD835), // yellow
-      Color(0xFFD90429), // red
-      Color(0xFF0FA65A), // green
-      Color(0xFF1E9CCC), // blue
+      Color(0xFFFDD835),
+      Color(0xFFD90429),
+      Color(0xFF0FA65A),
+      Color(0xFF1E9CCC),
     ];
 
     return Scaffold(
       body: Column(
         children: [
-          // 5 colored bars at top
           Row(
             children: barColors.map((c) => Expanded(child: Container(height: 6, color: c))).toList(),
           ),
@@ -48,20 +55,8 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // SALSO vertical logo
-                  Text('S', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: Colors.grey[800], letterSpacing: -1)),
-                  Text('A', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: Colors.grey[800], letterSpacing: -1)),
-                  Text('L', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: Colors.grey[800], letterSpacing: -1)),
-                  Text('S', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: Colors.grey[800], letterSpacing: -1)),
-                  Text('O', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: Colors.grey[800], letterSpacing: -1)),
-                  const SizedBox(height: 32),
-                  // Subtitle
-                  Text(
-                    'Workforce Management',
-                    style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 2),
-                  ),
+                  Image.asset('assets/icon.png', width: 100, height: 100),
                   const SizedBox(height: 40),
-                  // Loading bar
                   ClipRRect(
                     borderRadius: BorderRadius.circular(3),
                     child: SizedBox(

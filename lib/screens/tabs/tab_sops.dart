@@ -46,10 +46,7 @@ class _TabSOPsState extends State<TabSOPs> {
           Container(
             decoration: const BoxDecoration(
               color: SalsoTheme.primary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
+              borderRadius: BorderRadius.zero,
             ),
             padding: const EdgeInsets.fromLTRB(20, 48, 20, 20),
             child: Column(
