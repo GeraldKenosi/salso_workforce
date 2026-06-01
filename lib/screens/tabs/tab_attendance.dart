@@ -48,7 +48,7 @@ class _TabAttendanceState extends State<TabAttendance> {
                 color: SalsoTheme.primary,
                 borderRadius: BorderRadius.zero,
               ),
-              padding: const EdgeInsets.fromLTRB(20, 48, 20, 32),
+              padding: const EdgeInsets.fromLTRB(60, 48, 20, 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

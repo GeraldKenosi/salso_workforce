@@ -36,7 +36,7 @@ class EmployeeProfilePage extends StatelessWidget {
                   color: SalsoTheme.primary,
                   borderRadius: BorderRadius.zero,
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 48, 20, 24),
+                padding: const EdgeInsets.fromLTRB(60, 48, 20, 24),
                 child: Row(
                   children: [
                     CircleAvatar(

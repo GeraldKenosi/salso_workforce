@@ -127,12 +127,9 @@ class _AppShellState extends State<AppShell> {
       body: Builder(
         builder: (ctx) => Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 44),
-              child: IndexedStack(
-                index: _index,
-                children: _pages,
-              ),
+            IndexedStack(
+              index: _index,
+              children: _pages,
             ),
             SafeArea(
               child: Padding(

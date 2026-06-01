@@ -58,7 +58,7 @@ class NewSopPickerPage extends StatelessWidget {
               color: SalsoTheme.primary,
               borderRadius: BorderRadius.zero,
             ),
-            padding: const EdgeInsets.fromLTRB(20, 48, 20, 20),
+            padding: const EdgeInsets.fromLTRB(60, 48, 20, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
