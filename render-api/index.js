@@ -3,9 +3,25 @@ const cors = require("cors");
 const https = require("https");
 const admin = require("firebase-admin");
 
-// ─── Firebase Admin (from env var: raw JSON or Base64) ───
-if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  const creds = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+// ─── Firebase Admin (from individual env vars or Base64 blob) ───
+const hasServiceAccount = process.env.FIREBASE_PROJECT_ID
+  && process.env.FIREBASE_CLIENT_EMAIL
+  && process.env.FIREBASE_PRIVATE_KEY_BASE64
+  && process.env.FIREBASE_PRIVATE_KEY_ID;
+
+if (hasServiceAccount) {
+  const creds = {
+    type: "service_account",
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: Buffer.from(process.env.FIREBASE_PRIVATE_KEY_BASE64, "base64").toString("utf8"),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID || "",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${encodeURIComponent(process.env.FIREBASE_CLIENT_EMAIL)}`,
+  };
   admin.initializeApp({ credential: admin.credential.cert(creds) });
 } else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
   const creds = JSON.parse(
