@@ -189,10 +189,7 @@ app.post("/api/file-transfer-sharepoint", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields: storagePath, sharePointPath, fileName" });
     }
 
-    const { Storage } = require("@google-cloud/storage");
-    const gcs = new Storage();
-    const bucketName = "salso-workforce.firebasestorage.app";
-    const bucket = gcs.bucket(bucketName);
+    const bucket = admin.storage().bucket();
     const file = bucket.file(storagePath);
     const [exists] = await file.exists();
     if (!exists) return res.status(404).json({ error: "File not found in storage" });

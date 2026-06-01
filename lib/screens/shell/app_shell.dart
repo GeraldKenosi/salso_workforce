@@ -124,9 +124,37 @@ class _AppShellState extends State<AppShell> {
           ],
         ),
       ),
-      body: IndexedStack(
-        index: _index,
-        children: _pages,
+      body: Builder(
+        builder: (ctx) => Stack(
+          children: [
+            IndexedStack(
+              index: _index,
+              children: _pages,
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12, top: 8),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 3,
+                    borderRadius: BorderRadius.circular(10),
+                    shadowColor: Colors.black26,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => Scaffold.of(ctx).openDrawer(),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(Icons.menu, color: Color(0xFFD90429), size: 22),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
