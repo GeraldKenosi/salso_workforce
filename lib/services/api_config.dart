@@ -2,8 +2,8 @@ class ApiConfig {
   ApiConfig._();
 
   /// Base URL for the Render API server.
-  /// Change this to your production URL when deployed.
-  static const String baseUrl = 'https://api.salso.org.za';
+  /// Change to your custom domain when ready (e.g. https://api.salso.org.za).
+  static const String baseUrl = 'https://salso-workforce-api.onrender.com';
 
   static const String hrCreateUser = '$baseUrl/api/hr-create-user';
   static const String fileTransferSharePoint = '$baseUrl/api/file-transfer-sharepoint';
